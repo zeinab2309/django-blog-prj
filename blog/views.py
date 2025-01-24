@@ -38,17 +38,19 @@ class PostListView(ListView):
 
 
 
-
 #ایدی ها ثابت نیستن
-# def post_detail(request , id):
-#     post=get_object_or_404(Post,id=id ,status=Post.Status.PUBLISHED)
-#     context={
-#         'post':post,
-#     }
-#     return render(request,"blog/detail.html",context)
-class PostDetailView(DetailView):
-    model = Post
-    template_name = "blog/detail.html"
+def post_detail(request , id):
+    post=get_object_or_404(Post,id=id ,status=Post.Status.PUBLISHED)
+    context={
+        'post':post,
+    }
+    return render(request,"blog/detail.html",context)
+
+# class PostDetailView(DetailView):
+#     model = Post
+#     template_name = "blog/detail.html"
+
+
 
 def ticket(request):
 
@@ -73,6 +75,13 @@ def post_comment(request, post_id):
     comment=None
     form=CommentForm(data=request.POST)
     if form.is_valid():
-        comment=form.save(commit=False)#برای اینکه در دیتا بیس اول سیو نشه اول پست روش اضاف بشه بعد سیو بشه
+        comment=form.save(commit=False)#برای اینکه در دیتا بیس اول سیو نشه اول پست روش اضافه بشه بعد سیو بشه
         comment.post=post
         comment.save()
+    context={
+        'post':post,
+        'form':form,
+        'comment':comment
+
+    }
+    return render(request, "forms/comment.html", context)
