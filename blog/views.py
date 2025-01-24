@@ -11,7 +11,8 @@ from .models import *
 
 
 def index(request):
-    return HttpResponse("index")
+
+    return render(request, "blog/index.html")
 
 
 # def post_list(request):
