@@ -3,7 +3,7 @@ from django.shortcuts import render,get_object_or_404 ,redirect
 from django.template.context_processors import request
 from django.views.generic import DetailView ,ListView
 
-from .forms import TicketForm
+from .forms import TicketForm, CommentForm
 from .models import *
 #from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
@@ -67,3 +67,12 @@ def ticket(request):
     else:
         form=TicketForm()
     return render(request , "forms/ticket.html",{'form':form})
+
+def post_comment(request, post_id):
+    post=get_object_or_404(request, id=post_id, status=Post.Status.PUBLISHED)
+    comment=None
+    form=CommentForm(data=request.POST)
+    if form.is_valid():
+        comment=form.save(commit=False)#برای اینکه در دیتا بیس اول سیو نشه اول پست روش اضاف بشه بعد سیو بشه
+        comment.post=post
+        comment.save()
