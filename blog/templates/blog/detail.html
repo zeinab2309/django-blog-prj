@@ -11,5 +11,11 @@
     <hr>
     <p>{{ post.publish|jformat:"%Y/%m/%d-%H:%M" }}</p>
 
+    <form method="post" action="{% url 'blog:pst_comment' post.id %}">
+        {%csrf_token%}
+        {{form.as_p}}
+        <input type="submit" value="افزودن کامنت">
+    </form>
+
     <hr>
 {% endblock %}
