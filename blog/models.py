@@ -33,6 +33,9 @@ class Post(models.Model):
     #فیلد های انتخابی
     status=models.CharField(max_length=2,choices=Status.choices,default=Status.DRAFT ,verbose_name="وضعیت")
     #default ->برای وقتی این میذاریم ک ب عنوان پیش نویس هست تا وقتی ادمین اجازه ی انتشار را میدهد بعد انتشار پیدا میکند
+    reading_time=models.PositiveIntegerField(verbose_name="زمان مطالعه")
+
+
     # objects=models.Manager()
     objects = jmodels.jManager()
     published=PublishedManager()
