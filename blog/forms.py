@@ -1,5 +1,4 @@
 from django import forms
-
 from .models import Comment
 
 
@@ -37,4 +36,14 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model=Comment
         fields=['name','body']
+        widgets={
+            'body':forms.TextInput(attrs={
+                'placeholder':"متن",
+                'class':'cm-body'
+            }),
+            'name': forms.TextInput(attrs={
+                'placeholder': "نام",
+                'class': 'cm-name'
+            })
+        }
 

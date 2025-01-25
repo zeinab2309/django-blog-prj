@@ -119,3 +119,8 @@ h3::before {
 	width: 400px;
 	margin: 0 auto;
 }
+
+.cm-body{
+	border-radius: 40%;
+	height: 70px;
+}
