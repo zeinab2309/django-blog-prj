@@ -5,7 +5,7 @@ from django_jalali.db import models as jmodels
 from  django.urls import  reverse
 
 
-#Managers
+#Managers ->میخواییم اونهایی که published هست را نمایش میده
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Post.Status.PUBLISHED)
@@ -21,6 +21,7 @@ class Post(models.Model):
 #هر نویسنده در پست ها میتونه چند پست داشته باشه ولی هر پست متعلق به یک نویسنده هست
     #Relations
     auther=models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_posts",verbose_name="نویسنده")
+    #مدل هایی ک یک به چند هستند را از ForeignKey استفاده میکنیم
     #CASCADE-> اگر کاربری حذف شه تمام پست هاشم همراهش حذف میشه مثل پست اینستا ک اگر اکان حذف شه پست ها هم حذف میشن
     #data fileds
     title=models.CharField(max_length=250 ,verbose_name="موضوع")

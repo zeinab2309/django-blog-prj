@@ -9,7 +9,7 @@
     {% for post in posts %}
     <li style="--i: {{ forloop.counter}}">
         <h3 class="post-title"><a href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
-        <p class="descr"> {{ post.description | truncatewords:5 }} </p>  <!-- #تعداد کلماتی که نشون بده برامون اگر جملات خیلی بود-->
+        <p class="descr"> {{ post.description | truncatewords:5 }} </p>
     </li>
     {% endfor %}
 
