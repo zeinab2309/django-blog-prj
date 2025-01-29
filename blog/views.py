@@ -35,7 +35,7 @@ class PostListView(ListView):
     queryset = Post.published.all()
     context_object_name = "posts"
     paginate_by = 3
-    template_name = "blog/List.html"
+    template_name = "blog/list.html"
 
 
 
