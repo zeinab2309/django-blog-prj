@@ -1,9 +1,10 @@
+from django.contrib.admin.templatetags.admin_list import results
 from django.http import  HttpResponse
 from django.shortcuts import render,get_object_or_404 ,redirect
 from django.template.context_processors import request
 from django.views.generic import DetailView ,ListView
 
-from .forms import TicketForm, CommentForm
+from .forms import TicketForm, CommentForm, SearchForm
 from .models import *
 #from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
@@ -91,3 +92,19 @@ def post_comment(request, post_id):
 
     }
     return render(request, "forms/comment.html", context)
+
+def post_search(request):
+    query=None
+    esults=[]
+    if 'query' in request.GET:
+       form=SearchForm(data=request.GET)
+       if form.is_valid():
+           query=form.cleaned_data['query']
+           results1=Post.published.filter(title__icontains=query)
+           results2 = Post.published.filter(description__icontains=query)
+           results=results1 | results2
+       context={
+           'query':query,
+           'results':results
+       }
+    return render(request,'blog/search.html',context)
