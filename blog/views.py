@@ -1,12 +1,8 @@
-from django.contrib.admin.templatetags.admin_list import results
-from django.http import  HttpResponse
 from django.shortcuts import render,get_object_or_404 ,redirect
-from django.template.context_processors import request
 from django.views.generic import DetailView ,ListView
-
 from .forms import TicketForm, CommentForm, SearchForm
 from .models import *
-#from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from django.contrib.postgres.search import TrigramSimilarity
 
 # Create your views here.
 
@@ -95,14 +91,16 @@ def post_comment(request, post_id):
 
 def post_search(request):
     query=None
-    esults=[]
+    results=[]
     if 'query' in request.GET:
        form=SearchForm(data=request.GET)
        if form.is_valid():
            query=form.cleaned_data['query']
-           results1=Post.published.filter(title__icontains=query)
-           results2 = Post.published.filter(description__icontains=query)
-           results=results1 | results2
+           results1 = (Post.published.annotate(similarity=TrigramSimilarity('title',query))
+                      .filter(similarity__gt=0.1)).order_by('-similarity')
+           results2 = (Post.published.annotate(similarity=TrigramSimilarity('description',query))
+                      .filter(similarity__gt=0.1)).order_by('-similarity')
+           results=(results1 | results2).order_by('-similarity')
        context={
            'query':query,
            'results':results
