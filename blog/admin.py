@@ -10,10 +10,10 @@ admin.sites.AdminSite.index_title="پنل مدیریت"
 
 class ImageInline(admin.TabularInline):
     model=Image
-
+    extra = 1 #اضافه کردن یک فیلد برای عکس در ادمین
 class CommentInline(admin.TabularInline):
     model=Comment
-
+    extra = 0 #کامنت از طرف ادمین اضافه نمیشه پس احتیاج نیست
 #این خط باعث میشود که مدل پست ک ایجاد کردیم در قسمت ادمین باشه و ب دلخواه ما ترتیبش باشه
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
