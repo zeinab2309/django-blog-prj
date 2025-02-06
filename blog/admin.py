@@ -3,18 +3,17 @@ from django_jalali.admin.filters import JDateFieldListFilter
 from .models import *
 # Register your models here.
 
-#برای فارسی سازی پنل مدیریت میتونیم هم این ها رو برداریم و چون تو تنظیمات فارسی رو تعریف کردیم خودش هم میتونه فارسی کنه ب صورت خودکار با ترجمه شخصی خودش
 admin.sites.AdminSite.site_header="پنل مدیریت جنگو"
 admin.sites.AdminSite.site_title="پنل "
 admin.sites.AdminSite.index_title="پنل مدیریت"
 
 class ImageInline(admin.TabularInline):
     model=Image
-    extra = 1 #اضافه کردن یک فیلد برای عکس در ادمین
+    extra = 1
 class CommentInline(admin.TabularInline):
     model=Comment
-    extra = 0 #کامنت از طرف ادمین اضافه نمیشه پس احتیاج نیست
-#این خط باعث میشود که مدل پست ک ایجاد کردیم در قسمت ادمین باشه و ب دلخواه ما ترتیبش باشه
+    extra = 0
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title','auther','publish','status']
@@ -23,9 +22,9 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['title','description']
     raw_id_fields = ['auther']
     date_hierarchy = 'publish'
-    prepopulated_fields = {"slug":['title']}#برای کلید فیلدی را که میخواییم خودکار تولید بشه مینویسم برای مقدار هم چیزی ک قراره اسلاگ ازش ساخته بشه ک تایتل هست
-    list_editable = ['status']#میتونیم در قسمت سلکت ست ها ادیت کنیم بدون اینکه صفحه ادیت پست را باز کنیم فیلد دلخواه رو تغییر بدیم
-    list_display_links = ['title','auther']#در حالت معمولی فقط روی اولین گزینه بزنیم صفحه ادیت رو میاره میتونیم ادیت کنیم برای بقیه از این استفاده میکنیم
+    prepopulated_fields = {"slug":['title']}
+    list_editable = ['status']
+    list_display_links = ['title','auther']
     inlines = ImageInline,CommentInline
 
 @admin.register(Ticket)
