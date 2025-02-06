@@ -8,6 +8,12 @@ admin.sites.AdminSite.site_header="پنل مدیریت جنگو"
 admin.sites.AdminSite.site_title="پنل "
 admin.sites.AdminSite.index_title="پنل مدیریت"
 
+class ImageInline(admin.TabularInline):
+    model=Image
+
+class CommentInline(admin.TabularInline):
+    model=Comment
+
 #این خط باعث میشود که مدل پست ک ایجاد کردیم در قسمت ادمین باشه و ب دلخواه ما ترتیبش باشه
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -20,7 +26,7 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug":['title']}#برای کلید فیلدی را که میخواییم خودکار تولید بشه مینویسم برای مقدار هم چیزی ک قراره اسلاگ ازش ساخته بشه ک تایتل هست
     list_editable = ['status']#میتونیم در قسمت سلکت ست ها ادیت کنیم بدون اینکه صفحه ادیت پست را باز کنیم فیلد دلخواه رو تغییر بدیم
     list_display_links = ['title','auther']#در حالت معمولی فقط روی اولین گزینه بزنیم صفحه ادیت رو میاره میتونیم ادیت کنیم برای بقیه از این استفاده میکنیم
-
+    inlines = ImageInline,CommentInline
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
