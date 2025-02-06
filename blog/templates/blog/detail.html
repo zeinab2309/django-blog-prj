@@ -11,7 +11,11 @@
     <p> {{ post.description |markdown }} </p>  <!-- اینتر هایی که زدیم انجام میشه-->
     <hr>
     <p>{{ post.publish|jformat:"%Y/%m/%d-%H:%M" }}</p>
-
+    <div>
+        {% for img in post.images.all %}
+            <img width="300px" height="200px" src="{{ img.image_file.url }}" alt="{{ img.title }}">
+        {% endfor %}
+    </div>
     <div>
     {% with comments.count as cm_count%}<!--بخواییم از یک دستور چند بار استفاه کنیم از این روش محدوده را مشخص میکنیم و اسم مشخص میکنیم-->
     {{cm_count}} comment{{cm_count|pluralize}}
