@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404 ,redirect
 from django.views.generic import DetailView ,ListView
-from .forms import TicketForm, CommentForm, SearchForm
+from .forms import TicketForm, CommentForm, SearchForm,CreatePostForm
 from .models import *
 from django.contrib.postgres.search import TrigramSimilarity
 
@@ -38,7 +38,7 @@ class PostListView(ListView):
 
 #ایدی ها ثابت نیستن
 def post_detail(request , pk):
-    post=get_object_or_404(Post,id=pk ,status=Post.Status.PUBLISHED)
+    post=get_object_or_404(Post, id=pk, status=Post.Status.PUBLISHED)
     comments=post.comments.filter(active=True)
     form=CommentForm()
     context={
@@ -111,3 +111,17 @@ def profile(request):
     user=request.user
     posts=Post.published.filter(auther=user)
     return render(request, 'blog/profile.html', {'posts':posts})
+
+def create_post(request):
+    if request.method=="POST":
+        form=CreatePostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post=form.save(commit=False)
+            post.auther=request.user
+            post.images.add(form.cleaned_data['image1'])
+            post.images.add(form.cleaned_data['image2'])
+            post.save()
+            return redirect('blog:index')
+    else:
+        form=CreatePostForm()
+    return render(request, 'forms/create_post.html',{'form':form})
