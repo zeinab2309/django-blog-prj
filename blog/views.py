@@ -118,10 +118,17 @@ def create_post(request):
         if form.is_valid():
             post=form.save(commit=False)
             post.auther=request.user
-            post.images.add(form.cleaned_data['image1'])
-            post.images.add(form.cleaned_data['image2'])
             post.save()
-            return redirect('blog:index')
+            Image.objects.create(image_file=form.cleaned_data['image1'],post=post)
+            Image.objects.create(image_file=form.cleaned_data['image2'],post=post)
+            return redirect('blog:profile')
     else:
         form=CreatePostForm()
-    return render(request, 'forms/create_post.html',{'form':form})
+    return render(request, 'forms/create-post.html',{'form':form})
+
+def delete_post(request,post_id):
+    post=get_object_or_404(Post,id=post_id)
+    if request.method=="POST":
+        post.delete()
+        return redirect('blog:profile')
+    return render(request,'forms/delete-post.html',{'post':post})
