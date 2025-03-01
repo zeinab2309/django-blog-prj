@@ -3,7 +3,13 @@
     <input type="submit" value="جستجو" >
 
 </form>
-
+    {% if request.user.is_authenticated %}
+        <div>
+            <a href="#">{{ request.user.username }}</a>
+        </div>
+    {% else %}
+        <a href="#">ورود</a>
+    {% endif %}
 <p><a href="{% url 'blog:profile' %}">پروفایل</a> </p>
 <p><a href="{% url 'blog:index' %}">صفحه اصلی</a> </p>
 <p><a href="{% url 'blog:post_list' %}">پست ها</a> </p>
