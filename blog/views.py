@@ -1,8 +1,11 @@
+from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404 ,redirect
 from django.views.generic import DetailView ,ListView
-from .forms import TicketForm, CommentForm, SearchForm,CreatePostForm
+from .forms import TicketForm, CommentForm, SearchForm,CreatePostForm, LoginForm
 from .models import *
 from django.contrib.postgres.search import TrigramSimilarity
+from django.contrib.auth import authenticate, login
+
 
 # Create your views here.
 
@@ -154,3 +157,19 @@ def edit_post(request,post_id):
     else:
         form = CreatePostForm(instance=post)
     return render(request, 'forms/create-post.html', {'form': form, 'post':post})
+
+def user_login(request):
+    if request.method=="POST":
+        form= LoginForm(request.POST)
+        if form.is_valid():
+            cd=form.cleaned_data
+            user= authenticate(request, username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return  HttpResponse("شما با موفقیت وارد شده اید")
+                else:
+                    return HttpResponse("شما نتوانستید وارد بشوید")
+    else:
+        form=LoginForm()
+    return render(request, 'forms/login.html', {'form':form})
