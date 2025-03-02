@@ -167,7 +167,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return  HttpResponse("شما با موفقیت وارد شده اید")
+                    return  redirect('blog:profile')
                 else:
                     return HttpResponse("شما نتوانستید وارد بشوید")
     else:
