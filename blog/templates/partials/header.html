@@ -6,7 +6,7 @@
     {% if request.user.is_authenticated %}
         <div>
             <a href="#">{{ request.user.first_name |default:request.user.username}}</a>
-        </div>اگر من یوزرم اسم داشت اسمش رو نمایش میده اگر نداشت یوزر نیم اصلی رو نمایش میده
+        </div>
     {% else %}
         <a href="{% url 'blog:login' %}">ورود</a>
     {% endif %}
