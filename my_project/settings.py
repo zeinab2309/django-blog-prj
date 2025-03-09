@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 from telnetlib import LOGOUT
 
-from django.conf.global_settings import MEDIA_URL, MEDIA_ROOT, LOGIN_REDIRECT_URL, LOGIN_URL
+from django.conf.global_settings import MEDIA_URL, MEDIA_ROOT, LOGIN_REDIRECT_URL, LOGIN_URL, EMAIL_BACKEND
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -160,3 +160,5 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = False
 LOGIN_REDIRECT_URL='/blog/profile/'
 LOGIN_URL='/blog/login/'
 LOGOUT_URL='/blog/logout/'
+
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
