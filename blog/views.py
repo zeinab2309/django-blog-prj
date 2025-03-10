@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404 ,redirect
 from django.views.generic import DetailView ,ListView
-from .forms import TicketForm, CommentForm, SearchForm,CreatePostForm
+from .forms import TicketForm, CommentForm, SearchForm, CreatePostForm, UserRegisterForm
 from .models import *
 from django.contrib.postgres.search import TrigramSimilarity
 from django.contrib.auth import authenticate, login, logout
@@ -183,3 +183,15 @@ def edit_post(request,post_id):
 def log_out(request):
     logout(request)
     return  redirect(request.META.get('HTTP_REFERER'))
+
+def register(request):
+    if request.method=='POST':
+        form =UserRegisterForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return render(request, 'registration/register_done.html', {'user':user})
+    else:
+        form=UserRegisterForm()
+    return render(request, 'registration/register.html', {'form':form})
