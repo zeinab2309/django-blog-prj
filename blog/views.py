@@ -1,8 +1,10 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404 ,redirect
 from django.views.generic import DetailView ,ListView
-from .forms import TicketForm, CommentForm, SearchForm, CreatePostForm, UserRegisterForm
+from .forms import TicketForm, CommentForm, SearchForm, CreatePostForm, UserRegisterForm, UserEditForm, AccountEditForm
 from .models import *
 from django.contrib.postgres.search import TrigramSimilarity
 from django.contrib.auth import authenticate, login, logout
@@ -184,6 +186,8 @@ def log_out(request):
     logout(request)
     return  redirect(request.META.get('HTTP_REFERER'))
 
+
+
 def register(request):
     if request.method=='POST':
         form =UserRegisterForm(request.POST)
@@ -191,7 +195,30 @@ def register(request):
             user=form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
+            Account.objects.create(user=user)
             return render(request, 'registration/register_done.html', {'user':user})
     else:
         form=UserRegisterForm()
     return render(request, 'registration/register.html', {'form':form})
+
+@login_required
+def edit_account(request):
+    if request.method=="POST":
+        user_form=UserEditForm(request.POST, instance=request.user)
+        account_form=AccountEditForm(request.POST, instance=request.user.account, files=request.FILES)
+        if account_form.is_valid() and user_form.is_valid():
+            account_form.save()
+            user_form.save()
+            context = {
+                'account_form': account_form,
+                'user_form': user_form
+            }
+            return render(request, 'registration/edit_account_done.html', context)
+    else:
+        user_form=UserEditForm(instance=request.user)
+        account_form=AccountEditForm(instance=request.user.account)
+    context={
+        'account_form':account_form,
+        'user_form':user_form
+    }
+    return render(request, 'registration/edit_account.html',context)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import CharField
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django_jalali.db import models as jmodels
@@ -124,3 +125,16 @@ class Image(models.Model):
     def __str__(self):
         return self.title if self.title else "None"
 
+class Account(models.Model):
+    user=models.OneToOneField(User, related_name="account", on_delete=models.CASCADE )
+    date_of_birth=jmodels.jDateTimeField(verbose_name="تاریخ تولد", blank=True, null=True)
+    bio=models.TextField(verbose_name=" بایو ", blank=True, null=True )
+    photo=ResizedImageField(upload_to="account_images/", size=[500,500], quality=60, crop=['middle','center'],null=True, blank=True)
+    job=models.CharField(max_length=250,verbose_name="شغل", blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name= "اکانت"
+        verbose_name_plural="اکانت ها"
