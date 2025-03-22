@@ -1,6 +1,7 @@
 from lib2to3.fixes.fix_input import context
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage,PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404 ,redirect
 from django.views.generic import DetailView ,ListView
@@ -18,28 +19,32 @@ def index(request):
     return render(request, "blog/index.html")
 
 
-# def post_list(request):
-#     posts=Post.published.all()
-#     paginator=Paginator(posts,2)
-#     page_number=request.GET.get('page',1) #میگه در گت برو شماره صفحه رو پیدا کن اگر ب هر دلیلی پیدا نکردی مقدار پیشفرض 1 را بردار (از قابلیت های گت هست)
-#     try:
-#         posts=paginator.page(page_number)
-#     except EmptyPage:
-#         posts=paginator.page(paginator.num_pages) #اگر عدد ای دی بالا بود و وجود نداشت صفحه لیست اخر را نمایش بده
-#     except PageNotAnInteger:
-#         posts = paginator.page(1)
-#     context={
-#         'posts':posts,
-#     }
-#     return render(request,"blog/list.html",context)
+def post_list(request, category=None):
+    if category is not None:
+        posts=Post.published.filter(category=category)
+    else:
+        posts=Post.published.all()
+    paginator=Paginator(posts,3)
+    page_number=request.GET.get('page',1) #میگه در گت برو شماره صفحه رو پیدا کن اگر ب هر دلیلی پیدا نکردی مقدار پیشفرض 1 را بردار (از قابلیت های گت هست)
+    try:
+        posts=paginator.page(page_number)
+    except EmptyPage:
+        posts=paginator.page(paginator.num_pages) #اگر عدد ای دی بالا بود و وجود نداشت صفحه لیست اخر را نمایش بده
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    context={
+        'posts':posts,
+        'category':category,
+    }
+    return render(request,"blog/list.html",context)
 
 #----class base view----
-class PostListView(ListView):
-    queryset = Post.published.all()
-    context_object_name = "posts"
-    paginate_by = 3
-    template_name = "blog/list.html"
-
+# class PostListView(ListView):
+#     queryset = Post.published.all()
+#     context_object_name = "posts"
+#     paginate_by = 3
+#     template_name = "blog/list.html"
+#
 
 
 #ایدی ها ثابت نیستن

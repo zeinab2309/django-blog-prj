@@ -59,7 +59,7 @@ class CreatePostForm(forms.ModelForm):
     image2 = forms.ImageField(label="تصویر دوم")
     class Meta:
         model= Post
-        fields=['title','description','reading_time']
+        fields=['title','description','reading_time','category']
 
 # class LoginForm(forms.Form):
 #     username=forms.CharField(max_length=250,required=True)

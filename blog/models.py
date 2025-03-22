@@ -18,9 +18,14 @@ class Post(models.Model):
         DRAFT = "DF", 'Draft'
         PUBLISHED = "PB", 'Published'
         REJECTED = "RJ", 'Rejected'#برای رد شده
+    CATEGORY_CHOICES=(
+        ('تکنولوژی','تکنولوژی'),
+        ('زبان برنامه نویسی','زبان برنامه نویسی'),
+        ('هوش مصنوعی','هوش مصنوعی'),
+        ('بلاکچین','بلاکچین'),
+        ('سایر','سایر')
+    )
 
-#یک سری فیلد مثل تایتل ما توش مقداری مینویسیم و میره یک سری فیلد مثل کلاس استاتوس ممکنه چند مقادیر مشخص داشته باشه ولی یک سری فیلد دیگه ممکن است از یک جدول دیگه باشه ک داریم استفاده میکنیم جدول یوزر نیاز داریم از خود جنگو استفاده میکنیمmany-to-one
-#هر نویسنده در پست ها میتونه چند پست داشته باشه ولی هر پست متعلق به یک نویسنده هست
     #Relations
     auther=models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_posts",verbose_name="نویسنده")
     #مدل هایی ک یک به چند هستند را از ForeignKey استفاده میکنیم
@@ -37,7 +42,7 @@ class Post(models.Model):
     status=models.CharField(max_length=2,choices=Status.choices,default=Status.DRAFT ,verbose_name="وضعیت")
     #default ->برای وقتی این میذاریم ک ب عنوان پیش نویس هست تا وقتی ادمین اجازه ی انتشار را میدهد بعد انتشار پیدا میکند
     reading_time=models.PositiveIntegerField(verbose_name="زمان مطالعه")
-
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='سایر')
 
     # objects=models.Manager()
     objects = jmodels.jManager()

@@ -16,7 +16,7 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title','auther','publish','status']
+    list_display = ['title','auther','category','publish','status']
     ordering = ['title','publish']
     list_filter = ['status','auther',('publish',JDateFieldListFilter)]
     search_fields = ['title','description']
